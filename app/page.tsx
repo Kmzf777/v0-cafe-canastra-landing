@@ -104,7 +104,7 @@ export default function CafeCanastraLanding() {
       await Promise.all(webhookPromises)
 
       // Abrir WhatsApp
-      window.open("https://wa.me/5534973081710", "_blank")
+      window.open("https://wa.me/5534997308171", "_blank")
 
       // Limpar formulário
       setName("")
@@ -114,7 +114,7 @@ export default function CafeCanastraLanding() {
     } catch (error) {
       console.error("Erro ao enviar dados:", error)
       // Mesmo com erro, abrir WhatsApp
-      window.open("https://wa.me/5534973081710", "_blank")
+      window.open("https://wa.me/5534997308171", "_blank")
     } finally {
       setIsSubmitting(false)
     }
