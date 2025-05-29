@@ -135,25 +135,6 @@ export default function CafeCanastraLanding() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/20" />
         </div>
 
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <div
-            className={`transition-all duration-1000 ${
-              isHeroVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-            }`}
-          >
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-              Torrefação sob medida
-              <br />
-              <span className="text-orange-400 bg-gradient-to-r from-orange-400 to-orange-500 bg-clip-text text-transparent">
-                com a sua marca.
-              </span>
-            </h1>
-            <p className="text-xl md:text-2xl text-white/90 mb-8 font-light max-w-2xl mx-auto">
-              Você cuida da marca. A gente entrega o sabor que conquista corações.
-            </p>
-          </div>
-        </div>
-
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
           <Button
             onClick={scrollToForm}
@@ -179,8 +160,26 @@ export default function CafeCanastraLanding() {
               alt="Café Canastra"
               width={144}
               height={86}
-              className="mx-auto mb-8"
+              className="mx-auto mb-12"
             />
+
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-800 mb-6 leading-tight">
+              Torrefação sob medida
+              <br />
+              <span className="text-orange-500">com a sua marca.</span>
+            </h1>
+            <p className="text-lg md:text-xl text-gray-600 mb-8 font-light max-w-2xl mx-auto">
+              Você cuida da marca. A gente entrega o sabor que conquista corações.
+            </p>
+
+            <Button
+              onClick={scrollToForm}
+              size="lg"
+              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-10 py-5 text-lg font-semibold rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 group"
+            >
+              Quero minha marca de café
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
           </div>
         </div>
       </section>
@@ -327,7 +326,7 @@ export default function CafeCanastraLanding() {
                     className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-3 rounded-full group"
                     onClick={scrollToForm}
                   >
-                    Entrar em contato
+                    Entrar em contato agora!
                     <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </CardContent>
@@ -343,7 +342,7 @@ export default function CafeCanastraLanding() {
                   />
                 </div>
                 <CardContent className="p-8">
-                  <h3 className="text-3xl font-bold text-gray-800 mb-4">Café Tradicional</h3>
+                  <h3 className="text-3xl font-bold text-gray-800 mb-4">Café Especial</h3>
                   <p className="text-gray-600 mb-6 leading-relaxed">
                     Moído ou em grãos. Disponível em 250g, 500g e 1Kg. Versatilidade para todos os momentos.
                   </p>
@@ -351,7 +350,7 @@ export default function CafeCanastraLanding() {
                     className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-3 rounded-full group"
                     onClick={scrollToForm}
                   >
-                    Entrar em contato
+                    Entrar em contato agora!
                     <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </CardContent>
@@ -411,7 +410,7 @@ export default function CafeCanastraLanding() {
             }`}
           >
             <h2 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-16">
-              Entre em <span className="text-orange-500">contato</span>
+              Entre em <span className="text-orange-500">contato agora!</span>
             </h2>
             <div className="max-w-lg mx-auto">
               <Card className="bg-white border-0 rounded-3xl p-8 shadow-2xl shadow-orange-200/20">
