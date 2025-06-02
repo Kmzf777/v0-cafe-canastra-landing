@@ -49,13 +49,14 @@ export default function CafeCanastraLanding() {
   const { isVisible: isSocialProofVisible, elementRef: socialProofRef } = useScrollAnimation()
   const { isVisible: isOptionsVisible, elementRef: optionsRef } = useScrollAnimation()
   const { isVisible: isHistoryVisible, elementRef: historyRef } = useScrollAnimation()
-  const { isVisible: isContactVisible, elementRef: contactRef } = useScrollAnimation()
   const { isVisible: isFaqVisible, elementRef: faqRef } = useScrollAnimation()
   const [name, setName] = useState("")
   const [company, setCompany] = useState("")
   const [email, setEmail] = useState("")
   const [whatsapp, setWhatsapp] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isContactVisible, setIsContactVisible] = useState(false)
+  const contactRef = useRef<HTMLElement>(null)
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index)
@@ -116,6 +117,32 @@ export default function CafeCanastraLanding() {
     }
   }
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsContactVisible(true)
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      {
+        threshold: 0.1,
+      },
+    )
+
+    if (contactRef.current) {
+      observer.observe(contactRef.current)
+    }
+
+    return () => {
+      if (contactRef.current) {
+        observer.unobserve(contactRef.current)
+      }
+    }
+  }, [])
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Hero Section */}
@@ -154,7 +181,7 @@ export default function CafeCanastraLanding() {
             <h2 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-8">
               Entre em <span className="text-orange-500">contato agora!</span>
             </h2>
-            <p className="text-lg md:text-xl text-center text-gray-600 mb-16 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-center text-gray-600 mb-8 max-w-2xl mx-auto">
               Assim que você preencher, já vamos te mandar uma mensagem!
             </p>
             <div className="max-w-lg mx-auto">
@@ -197,7 +224,7 @@ export default function CafeCanastraLanding() {
       </section>
 
       {/* Logo + Mini CTA */}
-      <section className="pb-0 pt-20 bg-white" ref={logoRef}>
+      <section className="pb-0 pt-0 bg-white" ref={logoRef}>
         <div className="container mx-auto px-4 text-center">
           <div
             className={`transition-all duration-1000 delay-200 ${
