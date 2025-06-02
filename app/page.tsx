@@ -198,7 +198,7 @@ export default function CafeCanastraLanding() {
               <span className="text-orange-500">com a Canastra?</span>
             </h2>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
               {[
                 {
                   icon: Coffee,
@@ -235,15 +235,15 @@ export default function CafeCanastraLanding() {
                   key={index}
                   className={`text-center hover:shadow-xl transition-all duration-500 transform hover:-translate-y-3 bg-white/90 backdrop-blur-sm border-0 rounded-3xl  flex flex-col justify-center group shadow-lg hover:shadow-orange-200/50 ${
                     isBenefitsVisible ? "animate-in slide-in-from-bottom-4" : ""
-                  }`}
-                  style={{ animationDelay: `${index * 100}ms`, height: "250px" }}
+                  } h-[220px] md:h-[250px]`}
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <CardContent className="p-8">
-                    <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <CardContent className="p-4 md:p-6">
+                    <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-300">
                       <benefit.icon className="w-8 h-8 text-white" />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-800 mb-3">{benefit.title}</h3>
-                    <p className="text-gray-600 leading-relaxed">{benefit.desc}</p>
+                    <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-2 md:mb-3">{benefit.title}</h3>
+                    <p className="text-sm md:text-base text-gray-600 leading-relaxed">{benefit.desc}</p>
                   </CardContent>
                 </Card>
               ))}
