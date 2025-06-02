@@ -67,7 +67,7 @@ export default function CafeCanastraLanding() {
   }
 
   const handleSubmit = async () => {
-    if (!name || !company || !email || !whatsapp) {
+    if (!name || !whatsapp) {
       alert("Por favor, preencha todos os campos.")
       return
     }
@@ -76,8 +76,6 @@ export default function CafeCanastraLanding() {
 
     const formData = {
       nome: name,
-      empresa: company,
-      email: email,
       whatsapp: whatsapp,
       timestamp: new Date().toISOString(),
     }
@@ -108,8 +106,6 @@ export default function CafeCanastraLanding() {
 
       // Limpar formulário
       setName("")
-      setCompany("")
-      setEmail("")
       setWhatsapp("")
     } catch (error) {
       console.error("Erro ao enviar dados:", error)
@@ -409,9 +405,12 @@ export default function CafeCanastraLanding() {
               isContactVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-8">
               Entre em <span className="text-orange-500">contato agora!</span>
             </h2>
+            <p className="text-lg md:text-xl text-center text-gray-600 mb-16 max-w-2xl mx-auto">
+              Assim que você preencher, já vamos te mandar uma mensagem!
+            </p>
             <div className="max-w-lg mx-auto">
               <Card className="bg-white border-0 rounded-3xl p-8 shadow-2xl shadow-orange-200/20">
                 <CardContent className="space-y-6">
@@ -422,24 +421,6 @@ export default function CafeCanastraLanding() {
                       placeholder="Nome"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="text"
-                      className="w-full py-4 px-6 rounded-full border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 text-gray-700 placeholder-gray-400"
-                      placeholder="Empresa"
-                      value={company}
-                      onChange={(e) => setCompany(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="email"
-                      className="w-full py-4 px-6 rounded-full border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 text-gray-700 placeholder-gray-400"
-                      placeholder="Email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
                   <div>
