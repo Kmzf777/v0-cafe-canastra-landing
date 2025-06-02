@@ -143,6 +143,59 @@ export default function CafeCanastraLanding() {
         </div>
       </section>
 
+      {/* Entre em contato */}
+      <section className="py-20 bg-white" id="contact" ref={contactRef}>
+        <div className="container mx-auto px-4">
+          <div
+            className={`transition-all duration-1000 ${
+              isContactVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+            }`}
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-8">
+              Entre em <span className="text-orange-500">contato agora!</span>
+            </h2>
+            <p className="text-lg md:text-xl text-center text-gray-600 mb-16 max-w-2xl mx-auto">
+              Assim que você preencher, já vamos te mandar uma mensagem!
+            </p>
+            <div className="max-w-lg mx-auto">
+              <Card className="bg-white border-0 rounded-3xl p-8 shadow-2xl shadow-orange-200/20">
+                <CardContent className="space-y-6">
+                  <div>
+                    <input
+                      type="text"
+                      className="w-full py-4 px-6 rounded-full border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 text-gray-700 placeholder-gray-400"
+                      placeholder="Nome"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="tel"
+                      className="w-full py-4 px-6 rounded-full border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 text-gray-700 placeholder-gray-400"
+                      placeholder="WhatsApp"
+                      value={whatsapp}
+                      onChange={(e) => setWhatsapp(e.target.value)}
+                    />
+                  </div>
+                  <Button
+                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 px-6 rounded-full focus:outline-none focus:shadow-outline transform hover:scale-105 transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed"
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Enviando..." : "Enviar"}
+                    {!isSubmitting && (
+                      <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    )}
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Logo + Mini CTA */}
       <section className="pb-0 pt-20 bg-white" ref={logoRef}>
         <div className="container mx-auto px-4 text-center">
@@ -392,59 +445,6 @@ export default function CafeCanastraLanding() {
                   corações.
                 </p>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Entre em contato */}
-      <section className="py-20 bg-white" id="contact" ref={contactRef}>
-        <div className="container mx-auto px-4">
-          <div
-            className={`transition-all duration-1000 ${
-              isContactVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-            }`}
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-8">
-              Entre em <span className="text-orange-500">contato agora!</span>
-            </h2>
-            <p className="text-lg md:text-xl text-center text-gray-600 mb-16 max-w-2xl mx-auto">
-              Assim que você preencher, já vamos te mandar uma mensagem!
-            </p>
-            <div className="max-w-lg mx-auto">
-              <Card className="bg-white border-0 rounded-3xl p-8 shadow-2xl shadow-orange-200/20">
-                <CardContent className="space-y-6">
-                  <div>
-                    <input
-                      type="text"
-                      className="w-full py-4 px-6 rounded-full border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 text-gray-700 placeholder-gray-400"
-                      placeholder="Nome"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="tel"
-                      className="w-full py-4 px-6 rounded-full border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 text-gray-700 placeholder-gray-400"
-                      placeholder="WhatsApp"
-                      value={whatsapp}
-                      onChange={(e) => setWhatsapp(e.target.value)}
-                    />
-                  </div>
-                  <Button
-                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 px-6 rounded-full focus:outline-none focus:shadow-outline transform hover:scale-105 transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed"
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "Enviando..." : "Enviar"}
-                    {!isSubmitting && (
-                      <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    )}
-                  </Button>
-                </CardContent>
-              </Card>
             </div>
           </div>
         </div>
