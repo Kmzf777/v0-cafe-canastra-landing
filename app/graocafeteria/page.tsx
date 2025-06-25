@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
   Coffee,
-  Package,
   Truck,
   Star,
   Award,
@@ -20,6 +19,9 @@ import {
   TrendingUp,
   Zap,
   FileCheck,
+  CheckCircle,
+  Trophy,
+  Heart,
 } from "lucide-react"
 
 // Custom hook for scroll animations
@@ -72,10 +74,17 @@ export default function GraoCafeteriaPage() {
   const [name, setName] = useState("")
   const [whatsapp, setWhatsapp] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [email, setEmail] = useState("")
+  const [currentProductIndex, setCurrentProductIndex] = useState(0)
 
   const scrollToForm = () => {
     const formSection = document.getElementById("form")
     formSection?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  const scrollToFormSmooth = () => {
+    formRef.current?.scrollIntoView({ behavior: "smooth" })
   }
 
   const handleSubmit = async () => {
@@ -89,6 +98,7 @@ export default function GraoCafeteriaPage() {
     const formData = {
       nome: name,
       whatsapp: whatsapp,
+      email: email,
       timestamp: new Date().toISOString(),
       origem: "graocafeteria",
     }
@@ -117,6 +127,7 @@ export default function GraoCafeteriaPage() {
       // Limpar formulário
       setName("")
       setWhatsapp("")
+      setEmail("")
 
       // Redirecionar para página de obrigado atacado
       router.push("/obrigadoatacado")
@@ -129,83 +140,194 @@ export default function GraoCafeteriaPage() {
     }
   }
 
+  const products = [
+    {
+      name: "Canastra Clássico",
+      description: "Aromático e forte, com notas achocolatadas que marcam o primeiro gole.",
+      price: "A partir de R$ 26,90/un.",
+      image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-X4Tfqg3Au5fR2T8N9HzYRC67135Xr5.png",
+    },
+    {
+      name: "Canastra Suave",
+      description: "Doce e equilibrado com toque cítrico. Perfeito para espresso premium.",
+      price: "A partir de R$ 26,90/un.",
+      image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-8XFNbekXijRAPKm8ztLV0yzIvvQjMT.png",
+    },
+    {
+      name: "Café Canela",
+      description: "Blend especial com canela. Sabor único que conquista paladares exigentes.",
+      price: "A partir de R$ 26,90/un.",
+      image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-65t8l0EGTYV2kk3jZseY2XhueHXjr7.png",
+    },
+  ]
+
+  const nextProduct = () => {
+    setCurrentProductIndex((prevIndex) => (prevIndex + 1) % products.length)
+  }
+
+  const prevProduct = () => {
+    setCurrentProductIndex((prevIndex) => (prevIndex - 1 + products.length) % products.length)
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Hero Section */}
-      <section className="py-20 bg-white" ref={heroRef}>
-        <div className="container mx-auto px-4 text-center">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+      {/* Cabeçalho Fixo */}
+      <header className="absolute top-0 left-0 right-0 z-50 bg-white/10 backdrop-blur-md border-b border-white/20 shadow-lg">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <Image
+            src="/images/logo-branca-transparente.png"
+            alt="Café Canastra"
+            width={120}
+            height={72}
+            className="h-12 w-auto drop-shadow-md"
+          />
+
+          {/* Menu Desktop */}
+          <nav className="hidden md:flex space-x-6">
+            <a
+              href="#produtos"
+              className="text-white hover:text-orange-300 transition-colors font-medium drop-shadow-sm"
+            >
+              Produtos
+            </a>
+            <a href="#sobre" className="text-white hover:text-orange-300 transition-colors font-medium drop-shadow-sm">
+              Sobre
+            </a>
+            <a
+              href="#contato"
+              className="text-white hover:text-orange-300 transition-colors font-medium drop-shadow-sm"
+            >
+              Contato
+            </a>
+          </nav>
+
+          {/* Botão Menu Mobile */}
+          <button className="md:hidden p-2" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            <div className="w-6 h-6 flex flex-col justify-center space-y-1">
+              <span
+                className={`block h-0.5 w-6 bg-white transition-transform drop-shadow-sm ${isMobileMenuOpen ? "rotate-45 translate-y-1.5" : ""}`}
+              ></span>
+              <span
+                className={`block h-0.5 w-6 bg-white transition-opacity drop-shadow-sm ${isMobileMenuOpen ? "opacity-0" : ""}`}
+              ></span>
+              <span
+                className={`block h-0.5 w-6 bg-white transition-transform drop-shadow-sm ${isMobileMenuOpen ? "-rotate-45 -translate-y-1.5" : ""}`}
+              ></span>
+            </div>
+          </button>
+
+          {/* Menu Mobile Colapsável */}
+          {isMobileMenuOpen && (
+            <nav className="absolute top-full left-0 bg-white/10 backdrop-blur-md border-b border-white/20 shadow-lg w-full md:hidden">
+              <div className="flex flex-col py-4">
+                <a
+                  href="#produtos"
+                  className="px-4 py-3 text-white hover:bg-white/10 transition-colors font-medium drop-shadow-sm"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Produtos
+                </a>
+                <a
+                  href="#sobre"
+                  className="px-4 py-3 text-white hover:bg-white/10 transition-colors font-medium drop-shadow-sm"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Sobre
+                </a>
+                <a
+                  href="#contato"
+                  className="px-4 py-3 text-white hover:bg-white/10 transition-colors font-medium drop-shadow-sm"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Contato
+                </a>
+              </div>
+            </nav>
+          )}
+        </div>
+      </header>
+
+      {/* Hero Section Responsivo */}
+      <section
+        className="min-h-screen flex items-center justify-center bg-white relative overflow-hidden"
+        ref={heroRef}
+      >
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/hero%20section%20img%20teste%201-4ARlgGHFuQTw296klLJTQMkJ1dGp7j.png"
+            alt="Café Canastra - Grãos de café especiais"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/30" />
+        </div>
+
+        <div className="container mx-auto px-4 text-center relative z-10">
           <div
             className={`transition-all duration-1000 ${
               isHeroVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
-            <Image
-              src="/images/logo-canastra.png"
-              alt="Café Canastra"
-              width={144}
-              height={86}
-              className="mx-auto mb-12"
-            />
-
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-800 mb-6 leading-tight">
-              O café que <span className="text-orange-500">TRANSFORMA</span>
+            <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold text-white mb-4 md:mb-6 leading-tight px-2 drop-shadow-lg">
+              O café que <span className="text-orange-400 drop-shadow-lg">TRANSFORMA</span>
               <br />
               seu negócio
             </h1>
 
-            <p className="text-xl md:text-2xl text-orange-600 font-semibold mb-4">
+            <p className="text-lg md:text-xl lg:text-2xl text-orange-300 font-semibold mb-3 md:mb-4 px-4 drop-shadow-md">
               Direto da Serra da Canastra • Preço Imbatível • Qualidade Excepcional
             </p>
 
-            <p className="text-lg md:text-xl text-gray-600 mb-8 font-light max-w-2xl mx-auto">
+            <p className="text-base md:text-lg lg:text-xl text-gray-200 mb-6 md:mb-8 font-light max-w-2xl mx-auto px-4 drop-shadow-md">
               Cafés especiais direto da fazenda
             </p>
 
             <Button
               onClick={scrollToForm}
               size="lg"
-              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-10 py-5 text-lg font-semibold rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 group"
+              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 md:px-10 py-4 md:py-5 text-base md:text-lg font-semibold rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 group w-full max-w-sm md:w-auto"
             >
               FALAR COM ESPECIALISTA
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-2 w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </div>
         </div>
       </section>
 
-      {/* Blocos de Destaque */}
-      <section className="py-16 bg-gradient-to-br from-gray-50 to-gray-100" ref={highlightsRef}>
+      {/* Blocos de Destaque Responsivos */}
+      <section className="py-12 md:py-16 bg-gradient-to-br from-gray-50 to-gray-100" ref={highlightsRef}>
         <div className="container mx-auto px-4">
           <div
             className={`transition-all duration-1000 ${
               isHighlightsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              <Card className="bg-white border-0 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center p-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-4xl mx-auto">
+              <Card className="bg-white border-0 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center p-4 md:p-6">
                 <CardContent className="p-0">
-                  <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <Coffee className="w-8 h-8 text-white" />
+                  <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
+                    <Coffee className="w-6 h-6 md:w-8 md:h-8 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-800">100% Arábica Especial</h3>
+                  <h3 className="text-lg md:text-xl font-bold text-gray-800">100% Arábica Especial</h3>
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-0 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center p-6">
+              <Card className="bg-white border-0 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center p-4 md:p-6">
                 <CardContent className="p-0">
-                  <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <Award className="w-8 h-8 text-white" />
+                  <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
+                    <Award className="w-6 h-6 md:w-8 md:h-8 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-800">Certificação Região do Cerrado</h3>
+                  <h3 className="text-lg md:text-xl font-bold text-gray-800">Certificação Região do Cerrado</h3>
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-0 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center p-6">
+              <Card className="bg-white border-0 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center p-4 md:p-6">
                 <CardContent className="p-0">
-                  <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <TrendingUp className="w-8 h-8 text-white" />
+                  <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
+                    <TrendingUp className="w-6 h-6 md:w-8 md:h-8 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-800">Preço Atacado Exclusivo</h3>
+                  <h3 className="text-lg md:text-xl font-bold text-gray-800">Preço Atacado Exclusivo</h3>
                 </CardContent>
               </Card>
             </div>
@@ -213,41 +335,52 @@ export default function GraoCafeteriaPage() {
         </div>
       </section>
 
-      {/* Prova Social */}
-      <section className="py-20 bg-white" ref={socialProofRef}>
+      {/* Prova Social Responsiva */}
+      <section className="py-12 md:py-20 bg-white" ref={socialProofRef}>
         <div className="container mx-auto px-4">
           <div
             className={`transition-all duration-1000 ${
               isSocialProofVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-16">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-gray-800 mb-8 md:mb-16 px-2">
               Nosso café <span className="text-orange-500">fideliza</span> o seu cliente!
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-0 rounded-3xl p-8 text-center shadow-lg">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+              <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-0 rounded-3xl p-6 md:p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
                 <CardContent className="p-0">
-                  <div className="text-4xl font-bold text-orange-600 mb-4">4/5</div>
-                  <p className="text-gray-700 leading-relaxed">
+                  <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 shadow-lg">
+                    <CheckCircle className="w-8 h-8 md:w-10 md:h-10 text-white" />
+                  </div>
+                  <div className="text-3xl md:text-4xl font-bold text-orange-600 mb-3 md:mb-4">4 a cada 5</div>
+                  <p className="text-sm md:text-base text-gray-700 leading-relaxed">
                     lojistas relataram aumento nas vendas após usarem nosso café
                   </p>
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-0 rounded-3xl p-8 text-center shadow-lg">
+              <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-0 rounded-3xl p-6 md:p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
                 <CardContent className="p-0">
-                  <div className="text-4xl font-bold text-orange-600 mb-4">#1</div>
-                  <p className="text-gray-700 leading-relaxed">
+                  <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 shadow-lg">
+                    <Trophy className="w-8 h-8 md:w-10 md:h-10 text-white" />
+                  </div>
+                  <div className="text-3xl md:text-4xl font-bold text-orange-600 mb-3 md:mb-4">Nº 1</div>
+                  <p className="text-sm md:text-base text-gray-700 leading-relaxed">
                     Líder de vendas entre os cafés especiais, nos pontos onde estamos
                   </p>
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-0 rounded-3xl p-8 text-center shadow-lg">
+              <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-0 rounded-3xl p-6 md:p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
                 <CardContent className="p-0">
-                  <div className="text-4xl font-bold text-orange-600 mb-4">93%</div>
-                  <p className="text-gray-700 leading-relaxed">dos lojistas são nossos parceiros a mais de 2 anos</p>
+                  <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 shadow-lg">
+                    <Heart className="w-8 h-8 md:w-10 md:h-10 text-white" />
+                  </div>
+                  <div className="text-3xl md:text-4xl font-bold text-orange-600 mb-3 md:mb-4">93%</div>
+                  <p className="text-sm md:text-base text-gray-700 leading-relaxed">
+                    dos lojistas são nossos parceiros a mais de 2 anos
+                  </p>
                 </CardContent>
               </Card>
             </div>
@@ -255,8 +388,8 @@ export default function GraoCafeteriaPage() {
         </div>
       </section>
 
-      {/* Mini CTA */}
-      <section className="py-16 bg-gradient-to-r from-orange-500 to-orange-600" ref={miniCtaRef}>
+      {/* Mini CTA Responsivo */}
+      <section className="py-12 md:py-16 bg-gradient-to-r from-orange-500 to-orange-600" ref={miniCtaRef}>
         <div className="container mx-auto px-4">
           <div
             className={`transition-all duration-1000 ${
@@ -264,36 +397,50 @@ export default function GraoCafeteriaPage() {
             }`}
           >
             <div className="text-center">
-              <p className="text-xl md:text-2xl text-white mb-8 max-w-4xl mx-auto leading-relaxed">
-                Mais aroma, mais fidelidade, mais lucro. E o melhor: com um preço justo que cabe na sua margem.
-              </p>
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-6 md:mb-8 max-w-4xl mx-auto leading-relaxed px-2">
+                Cobrimos qualquer oferta de preços!
+              </h2>
               <Button
                 onClick={scrollToForm}
                 size="lg"
-                className="bg-white text-orange-600 hover:bg-gray-100 px-10 py-5 text-lg font-semibold rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 group"
+                className="bg-white text-orange-600 hover:bg-gray-100 px-6 md:px-10 py-4 md:py-5 text-base md:text-lg font-semibold rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 group w-full max-w-sm md:w-auto mb-4"
               >
-                Receber Proposta em 1 Minuto
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                Solicitar Orçamento
+                <ArrowRight className="ml-2 w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
+              <p className="text-white/60 text-xs md:text-sm max-w-3xl mx-auto px-4">
+                Preço comprovado por nota fiscal em produtos da mesma categoria de qualidade: cafés especiais conforme a
+                SCA.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Produtos */}
-      <section className="py-20 bg-white" ref={productsRef}>
+      {/* Seção de Produtos Responsiva */}
+      <section className="py-12 md:py-20 bg-white" id="produtos" ref={productsRef}>
         <div className="container mx-auto px-4">
           <div
             className={`transition-all duration-1000 ${
               isProductsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-16">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-gray-800 mb-8 md:mb-16 px-2">
               Cafés que fazem <span className="text-orange-500">clientes voltarem</span>
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Desktop: Grid */}
+            <div className="hidden md:grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
               <Card className="overflow-hidden hover:shadow-2xl transition-all duration-500 bg-white border-0 rounded-3xl group shadow-lg hover:shadow-orange-200/50 transform hover:-translate-y-2">
+                <div className="h-64 relative overflow-hidden bg-gray-50 flex items-center justify-center">
+                  <Image
+                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-X4Tfqg3Au5fR2T8N9HzYRC67135Xr5.png"
+                    alt="Canastra Clássico"
+                    width={200}
+                    height={250}
+                    className="object-contain group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
                 <CardContent className="p-8">
                   <h3 className="text-3xl font-bold text-gray-800 mb-4">Canastra Clássico</h3>
                   <p className="text-gray-600 mb-4 leading-relaxed">
@@ -311,6 +458,15 @@ export default function GraoCafeteriaPage() {
               </Card>
 
               <Card className="overflow-hidden hover:shadow-2xl transition-all duration-500 bg-white border-0 rounded-3xl group shadow-lg hover:shadow-orange-200/50 transform hover:-translate-y-2">
+                <div className="h-64 relative overflow-hidden bg-gray-50 flex items-center justify-center">
+                  <Image
+                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-8XFNbekXijRAPKm8ztLV0yzIvvQjMT.png"
+                    alt="Canastra Suave"
+                    width={200}
+                    height={250}
+                    className="object-contain group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
                 <CardContent className="p-8">
                   <h3 className="text-3xl font-bold text-gray-800 mb-4">Canastra Suave</h3>
                   <p className="text-gray-600 mb-4 leading-relaxed">
@@ -328,6 +484,15 @@ export default function GraoCafeteriaPage() {
               </Card>
 
               <Card className="overflow-hidden hover:shadow-2xl transition-all duration-500 bg-white border-0 rounded-3xl group shadow-lg hover:shadow-orange-200/50 transform hover:-translate-y-2">
+                <div className="h-64 relative overflow-hidden bg-gray-50 flex items-center justify-center">
+                  <Image
+                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-65t8l0EGTYV2kk3jZseY2XhueHXjr7.png"
+                    alt="Café Canela"
+                    width={200}
+                    height={250}
+                    className="object-contain group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
                 <CardContent className="p-8">
                   <h3 className="text-3xl font-bold text-gray-800 mb-4">Café Canela</h3>
                   <p className="text-gray-600 mb-4 leading-relaxed">
@@ -344,54 +509,124 @@ export default function GraoCafeteriaPage() {
                 </CardContent>
               </Card>
             </div>
+
+            {/* Mobile: Carrossel Horizontal */}
+            <div className="md:hidden">
+              <div className="relative">
+                <Card className="w-full overflow-hidden bg-white border-0 rounded-3xl shadow-lg">
+                  <div className="h-64 bg-gray-50 flex items-center justify-center p-4">
+                    <Image
+                      src={products[currentProductIndex].image || "/placeholder.svg"}
+                      alt={products[currentProductIndex].name}
+                      width={200}
+                      height={250}
+                      className="object-contain max-h-full"
+                    />
+                  </div>
+                  <CardContent className="p-6">
+                    <h3 className="text-xl font-bold text-gray-800 mb-2">{products[currentProductIndex].name}</h3>
+                    <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                      {products[currentProductIndex].description}
+                    </p>
+                    <p className="text-lg font-bold text-orange-600 mb-4">{products[currentProductIndex].price}</p>
+                    <Button
+                      className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-3 rounded-full"
+                      onClick={scrollToForm}
+                    >
+                      Solicitar Orçamento
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <div className="absolute top-1/2 -translate-y-1/2 left-2">
+                  <button
+                    onClick={prevProduct}
+                    className="bg-white rounded-full shadow p-2 hover:bg-gray-100 transition-colors"
+                  >
+                    <ArrowRight className="w-6 h-6 text-gray-600 transform rotate-180" />
+                  </button>
+                </div>
+
+                <div className="absolute top-1/2 -translate-y-1/2 right-2">
+                  <button
+                    onClick={nextProduct}
+                    className="bg-white rounded-full shadow p-2 hover:bg-gray-100 transition-colors"
+                  >
+                    <ArrowRight className="w-6 h-6 text-gray-600" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex justify-center mt-4">
+                {products.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`w-2 h-2 rounded-full mx-1 ${
+                      index === currentProductIndex ? "bg-orange-500" : "bg-gray-300"
+                    }`}
+                    onClick={() => setCurrentProductIndex(index)}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Formulário */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-gray-100" id="form" ref={formRef}>
+      {/* Formulário Responsivo */}
+      <section className="py-12 md:py-20 bg-gradient-to-br from-gray-50 to-gray-100" id="contato" ref={formRef}>
         <div className="container mx-auto px-4">
           <div
             className={`transition-all duration-1000 ${
               isFormVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-8">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-gray-800 mb-4 md:mb-8 px-2">
               Aumente o lucro do seu <span className="text-orange-500">negócio agora</span>
             </h2>
-            <p className="text-lg md:text-xl text-center text-gray-600 mb-8 max-w-2xl mx-auto">
+            <p className="text-base md:text-lg lg:text-xl text-center text-gray-600 mb-6 md:mb-8 max-w-2xl mx-auto px-4">
               Nosso time está online. Resposta em segundos. Será um prazer atendê-lo.
             </p>
             <div className="max-w-lg mx-auto">
-              <Card className="bg-white border-0 rounded-3xl p-8 shadow-2xl shadow-orange-200/20">
-                <CardContent className="space-y-6">
+              <Card className="bg-white border-0 rounded-3xl p-6 md:p-8 shadow-2xl shadow-orange-200/20">
+                <CardContent className="flex flex-col gap-4">
                   <div>
                     <label className="block text-gray-700 text-sm font-bold mb-2">Nome Completo</label>
                     <input
                       type="text"
-                      className="w-full py-4 px-6 rounded-full border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 text-gray-700 placeholder-gray-400"
+                      className="w-full py-3 md:py-4 px-4 md:px-6 rounded-full border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 text-gray-700 placeholder-gray-400"
                       placeholder="Seu Nome Completo"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                     />
                   </div>
                   <div>
+                    <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                    <input
+                      type="email"
+                      className="w-full py-3 md:py-4 px-4 md:px-6 rounded-full border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 text-gray-700 placeholder-gray-400"
+                      placeholder="seu@email.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                  <div>
                     <label className="block text-gray-700 text-sm font-bold mb-2">WhatsApp</label>
                     <input
                       type="tel"
-                      className="w-full py-4 px-6 rounded-full border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 text-gray-700 placeholder-gray-400"
+                      className="w-full py-3 md:py-4 px-4 md:px-6 rounded-full border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 text-gray-700 placeholder-gray-400"
                       placeholder="(DD)XXXXX-XXXX"
                       value={whatsapp}
                       onChange={(e) => setWhatsapp(e.target.value)}
                     />
                   </div>
                   <Button
-                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 px-6 rounded-full focus:outline-none focus:shadow-outline transform hover:scale-105 transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 md:py-4 px-6 rounded-full focus:outline-none focus:shadow-outline transform hover:scale-105 transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-lg"
                     type="button"
                     onClick={handleSubmit}
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? "Enviando..." : "QUERO MINHA PROPOSTA AGORA"}
+                    {isSubmitting ? "Enviando..." : "ENVIAR"}
                     {!isSubmitting && (
                       <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     )}
@@ -415,45 +650,42 @@ export default function GraoCafeteriaPage() {
               Por que escolher <span className="text-orange-500">Café Canastra?</span>
             </h2>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
               {[
                 {
                   icon: Shield,
                   title: "Qualidade Certificada",
+                  subtitle: "Café acima de 80 pontos SCA",
                 },
                 {
                   icon: Coffee,
-                  title: "Frescor Garantido",
+                  title: "Frescor Máximo",
+                  subtitle: "Torras sob demanda",
                 },
                 {
                   icon: TrendingUp,
                   title: "Mais Lucro",
-                },
-                {
-                  icon: Zap,
-                  title: "Atendimento Ágil",
+                  subtitle: "Melhor preço do Brasil",
                 },
                 {
                   icon: Truck,
                   title: "Entrega Nacional",
-                },
-                {
-                  icon: Package,
-                  title: "Estoque Garantido",
+                  subtitle: "Logística rápida em todo país",
                 },
               ].map((benefit, index) => (
                 <Card
                   key={index}
                   className={`text-center hover:shadow-xl transition-all duration-500 transform hover:-translate-y-3 bg-white/90 backdrop-blur-sm border-0 rounded-3xl  flex flex-col justify-center group shadow-lg hover:shadow-orange-200/50 ${
                     isBenefitsVisible ? "animate-in slide-in-from-bottom-4" : ""
-                  } h-[180px] md:h-[200px]`}
+                  } h-[220px] md:h-[240px]`}
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <CardContent className="p-4 md:p-6">
                     <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-300">
                       <benefit.icon className="w-8 h-8 text-white" />
                     </div>
-                    <h3 className="text-lg md:text-xl font-bold text-gray-800">{benefit.title}</h3>
+                    <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-2">{benefit.title}</h3>
+                    <p className="text-sm md:text-base text-gray-600">{benefit.subtitle}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -476,27 +708,45 @@ export default function GraoCafeteriaPage() {
             <p className="text-xl text-center text-gray-600 mb-16">Mais de 500 cafeterias confiam</p>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-              <Card className="bg-white border-0 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 text-center">
+              <Card className="bg-white border-0 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex items-center justify-center">
                 <CardContent className="p-0">
-                  <h3 className="text-lg font-bold text-gray-800">Filho de Minas</h3>
+                  <Image
+                    src="/images/filho-de-minas-logo.png"
+                    alt="Filho de Minas"
+                    width={120}
+                    height={60}
+                    className="mx-auto"
+                  />
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-0 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 text-center">
+              <Card className="bg-white border-0 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex items-center justify-center">
                 <CardContent className="p-0">
-                  <h3 className="text-lg font-bold text-gray-800">Divina Terra</h3>
+                  <Image
+                    src="/images/divina-terra-logo.png"
+                    alt="Divina Terra"
+                    width={120}
+                    height={60}
+                    className="mx-auto"
+                  />
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-0 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 text-center">
+              <Card className="bg-white border-0 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex items-center justify-center">
                 <CardContent className="p-0">
-                  <h3 className="text-lg font-bold text-gray-800">Banca 43</h3>
+                  <Image src="/images/banca-43-logo.png" alt="Banca 43" width={120} height={60} className="mx-auto" />
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-0 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 text-center">
+              <Card className="bg-white border-0 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex items-center justify-center">
                 <CardContent className="p-0">
-                  <h3 className="text-lg font-bold text-gray-800">Empório Bahamas</h3>
+                  <Image
+                    src="/images/emporio-bahamas-logo.png"
+                    alt="Empório Bahamas"
+                    width={120}
+                    height={60}
+                    className="mx-auto"
+                  />
                 </CardContent>
               </Card>
             </div>

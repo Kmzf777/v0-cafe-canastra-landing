@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Instagram, MapPin, Phone, Mail, Building } from "lucide-react"
+import { Instagram, MapPin, Phone, Mail, Building, MessageCircle } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Obrigado - Café Canastra",
@@ -34,17 +34,32 @@ export default function ObrigadoPage() {
                 <span className="text-orange-500">Já te chamamos no Whatsapp.</span>
               </h1>
 
-              {/* Instagram Button */}
-              <Button
-                asChild
-                size="lg"
-                className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-10 py-5 text-lg font-semibold rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 group"
-              >
-                <a href="https://instagram.com/cafecanastra" target="_blank" rel="noopener noreferrer">
-                  <Instagram className="mr-3 w-6 h-6" />
-                  Siga-nos no Instagram
-                </a>
-              </Button>
+              {/* Buttons Container */}
+              <div className="flex flex-col space-y-4">
+                {/* WhatsApp Button */}
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-green-500 hover:bg-green-600 text-white px-10 py-5 text-lg font-semibold rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 group"
+                >
+                  <a href="https://wa.me/5534993195252?text=Ol%C3%A1%2C%20gostaria%20de%20conversar%20com%20o%20supervisor%20de%20vendas" target="_blank" rel="noopener noreferrer">
+                    <MessageCircle className="mr-3 w-6 h-6" />
+                    Abrir WhatsApp
+                  </a>
+                </Button>
+
+                {/* Instagram Button */}
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-10 py-5 text-lg font-semibold rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 group"
+                >
+                  <a href="https://instagram.com/cafecanastra" target="_blank" rel="noopener noreferrer">
+                    <Instagram className="mr-3 w-6 h-6" />
+                    Siga-nos no Instagram
+                  </a>
+                </Button>
+              </div>
             </div>
           </div>
         </main>
