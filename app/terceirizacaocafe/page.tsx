@@ -93,6 +93,7 @@ export default function CafeCanastraLanding() {
 
     const formData = {
       nome: name,
+      email: email,
       whatsapp: whatsapp,
       timestamp: new Date().toISOString(),
     }
@@ -120,6 +121,7 @@ export default function CafeCanastraLanding() {
 
       // Limpar formulário
       setName("")
+      setEmail("")
       setWhatsapp("")
 
       // Redirecionar para página de obrigado
@@ -211,6 +213,16 @@ export default function CafeCanastraLanding() {
                       placeholder="Seu Nome Aqui"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                    <input
+                      type="email"
+                      className="w-full py-4 px-6 rounded-full border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 text-gray-700 placeholder-gray-400"
+                      placeholder="seu@email.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
                   <div>

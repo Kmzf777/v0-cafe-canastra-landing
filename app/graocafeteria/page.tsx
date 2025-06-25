@@ -864,14 +864,7 @@ export default function GraoCafeteriaPage() {
             </div>
 
             <div className="text-center space-y-4 md:space-y-0 md:space-x-4 md:flex md:justify-center">
-              <Button
-                onClick={scrollToForm}
-                size="lg"
-                className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-10 py-5 text-lg font-semibold rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 group"
-              >
-                QUERO SER PARCEIRO AGORA
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              
 
               <Button
                 onClick={scrollToForm}
