@@ -2,13 +2,61 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Café Canastra - Torrefação sob medida com a sua marca",
+  title: {
+    default: "Café Canastra - O melhor café artesanal da Serra da Canastra",
+    template: "%s | Café Canastra",
+  },
   description:
-    "Você cuida da marca. A gente entrega o sabor que conquista corações. Café 100% Arábica da Serra da Canastra com design personalizado.",
+    "Descubra o sabor único do café especial da Serra da Canastra. Tradição familiar, qualidade artesanal e os melhores grãos do Brasil.",
+  keywords: ["café especial", "serra da canastra", "café brasileiro", "café artesanal", "café gourmet", "minas gerais"],
+  authors: [{ name: "Café Canastra" }],
+  creator: "Café Canastra",
+  publisher: "Café Canastra",
+  robots: "index, follow",
+  openGraph: {
+    type: "website",
+    locale: "pt_BR",
+    url: "https://cafecanastra.com",
+    siteName: "Café Canastra",
+    title: "Café Canastra - O melhor café artesanal da Serra da Canastra",
+    description:
+      "Descubra o sabor único do café especial da Serra da Canastra. Tradição familiar, qualidade artesanal e os melhores grãos do Brasil.",
+    images: [
+      {
+        url: "/logo-canastra.png",
+        width: 1200,
+        height: 630,
+        alt: "Café Canastra",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@cafecanastra",
+    creator: "@cafecanastra",
+    title: "Café Canastra - O melhor café artesanal da Serra da Canastra",
+    description:
+      "Descubra o sabor único do café especial da Serra da Canastra. Tradição familiar, qualidade artesanal e os melhores grãos do Brasil.",
+    images: ["/logo-canastra.png"],
+  },
+  verification: {
+    google: "google-site-verification-code",
+  },
+  alternates: {
+    canonical: "https://cafecanastra.com",
+  },
+  other: {
+    "theme-color": "#d97706",
+    "color-scheme": "light",
+    "mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "default",
+  },
     generator: 'v0.dev'
 }
 
@@ -20,30 +68,14 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <head>
-        {/* Google Tag Manager */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-PX8PWW6');`,
-          }}
-        />
-        {/* End Google Tag Manager */}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
       </head>
       <body className={inter.className}>
-        {/* Google Tag Manager (noscript) */}
-        <noscript>
-          <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-PX8PWW6"
-            height="0"
-            width="0"
-            style={{ display: "none", visibility: "hidden" }}
-          />
-        </noscript>
-        {/* End Google Tag Manager (noscript) */}
         {children}
+        <Toaster />
       </body>
     </html>
   )
