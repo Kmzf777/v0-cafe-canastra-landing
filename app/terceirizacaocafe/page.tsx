@@ -125,11 +125,11 @@ export default function CafeCanastraLanding() {
       setWhatsapp("")
 
       // Redirecionar para página de obrigado
-      router.push("/obrigado")
+      router.push("/obrigadoterceirizacao")
     } catch (error) {
       console.error("Erro ao enviar dados:", error)
       // Mesmo com erro, redirecionar para página de obrigado
-      router.push("/obrigado")
+      router.push("/obrigadoterceirizacao")
     } finally {
       setIsSubmitting(false)
     }
