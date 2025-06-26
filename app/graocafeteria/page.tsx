@@ -79,7 +79,7 @@ export default function GraoCafeteriaPage() {
   const [currentProductIndex, setCurrentProductIndex] = useState(0)
 
   const scrollToForm = () => {
-    const formSection = document.getElementById("form")
+    const formSection = document.getElementById("contato")
     formSection?.scrollIntoView({ behavior: "smooth" })
   }
 
@@ -864,8 +864,6 @@ export default function GraoCafeteriaPage() {
             </div>
 
             <div className="text-center space-y-4 md:space-y-0 md:space-x-4 md:flex md:justify-center">
-              
-
               <Button
                 onClick={scrollToForm}
                 size="lg"
