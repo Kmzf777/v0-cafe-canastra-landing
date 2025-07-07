@@ -42,7 +42,7 @@ export default function ObrigadoAtacadoPage() {
                   size="lg"
                   className="bg-green-500 hover:bg-green-600 text-white px-10 py-5 text-lg font-semibold rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 group"
                 >
-                  <a href="https://wa.me/5534993195252?text=Ol%C3%A1%2C%20gostaria%20de%20conversar%20com%20o%20supervisor%20de%20vendas" target="_blank" rel="noopener noreferrer">
+                  <a href="https://wa.me/553497308171" target="_blank" rel="noopener noreferrer">
                     <MessageCircle className="mr-3 w-6 h-6" />
                     Abrir WhatsApp
                   </a>
