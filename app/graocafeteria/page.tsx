@@ -777,10 +777,9 @@ export default function GraoCafeteriaPage() {
                     <Star className="w-5 h-5 text-orange-500 fill-current" />
                   </div>
                   <p className="text-gray-700 leading-relaxed mb-4">
-                    "Nossos clientes notaram a diferença imediatamente. O aroma é incrível e as vendas aumentaram
-                    bastante."
+                    "Começamos a usar o Café Canastra no escritório e foi um upgrade imediato: café em grão de altíssima qualidade, sabor marcante e aroma que muda o ambiente. O café especial deles deixou nosso café expresso ainda melhor. Agora, só compramos café em grãos frescos — virou tradição no nosso dia a dia. Recomendo para quem busca cafes especiais de verdade."
                   </p>
-                  <div className="font-bold text-gray-800">Brainer – Goiânia/GO</div>
+                  <div className="font-bold text-gray-800">Marcelo Vieira - Joinville/SC</div>
                 </CardContent>
               </Card>
 
@@ -794,10 +793,9 @@ export default function GraoCafeteriaPage() {
                     <Star className="w-5 h-5 text-orange-500 fill-current" />
                   </div>
                   <p className="text-gray-700 leading-relaxed mb-4">
-                    "O café gira rápido e os clientes sempre elogiam. Fomos aumentando a linha de produtos e agora
-                    dispomos dela completa, foi um sucesso."
+                    "Adicionei o Café Canastra ao meu empório porque precisava de um café em grao que realmente surpreendesse os clientes. A variedade de cafés especiais e a qualidade do café especial superaram as expectativas. O café expresso feito com café em grãos fresquinhos ganhou elogios até dos clientes mais exigentes."
                   </p>
-                  <div className="font-bold text-gray-800">Petterson Amorin – Frederico Westphalen/RS</div>
+                  <div className="font-bold text-gray-800">Helena Ramos – Petrolina/PE</div>
                 </CardContent>
               </Card>
 
@@ -811,10 +809,9 @@ export default function GraoCafeteriaPage() {
                     <Star className="w-5 h-5 text-orange-500 fill-current" />
                   </div>
                   <p className="text-gray-700 leading-relaxed mb-4">
-                    "Atendimento excepcional e produto de qualidade. A logística deles é rápida e o João me atende muito
-                    bem. Parceria que realmente funciona."
+                    "Aqui em casa, experimentar o Café Canastra foi uma experiência nova. Nunca tínhamos provado um café em grao tão saboroso. Preparamos café expresso usando café em grãos e percebemos o quanto faz diferença investir em cafes especiais de verdade. Agora é o nosso ritual diário."
                   </p>
-                  <div className="font-bold text-gray-800">Sônia Lopes – São Paulo/SP</div>
+                  <div className="font-bold text-gray-800">Eduardo Nogueira – Ribeirão Preto/SP</div>
                 </CardContent>
               </Card>
             </div>
