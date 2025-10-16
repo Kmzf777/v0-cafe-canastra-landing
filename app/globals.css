@@ -92,3 +92,15 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Ocultar botão flutuante do CookieYes (fallback) */
+#cookieyes__trigger,
+.cookieyes-trigger,
+.cky-btn,
+.cky-btn-iframe,
+[class*="cookieyes"],
+[id*="cookieyes"],
+[class^="cky-"],
+[id^="cky-"] {
+  display: none !important;
+}

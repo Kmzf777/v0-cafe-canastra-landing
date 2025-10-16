@@ -16,11 +16,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const isProd = process.env.NODE_ENV === "production"
+  const enableGtm = process.env.NODE_ENV === "production" && process.env.NEXT_PUBLIC_ENABLE_GTM === "true"
   return (
     <html lang="pt-BR">
       <head>
-        {isProd && (
+        {enableGtm && (
           <>
             {/* Google Tag Manager */}
             <script
@@ -37,7 +37,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         )}
       </head>
       <body className={inter.className}>
-        {isProd && (
+        {enableGtm && (
           <>
             {/* Google Tag Manager (noscript) */}
             <noscript>
