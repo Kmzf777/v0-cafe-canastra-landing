@@ -8,8 +8,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Café Canastra - Torrefação sob medida com a sua marca",
   description:
-    "Você cuida da marca. A gente entrega o sabor que conquista corações. Café 100% Arábica da Serra da Canastra com design personalizado.",
-    generator: 'v0.dev'
+    "Você cuida da marca. A gente entrega o sabor que conquista corações. Café 100% Arábica da Serra da Canastra com design personalizado."
 }
 
 export default function RootLayout({
