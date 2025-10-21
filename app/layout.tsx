@@ -16,7 +16,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const enableGtm = process.env.NODE_ENV === "production" && process.env.NEXT_PUBLIC_ENABLE_GTM === "true"
+  const enableGtm = true
   return (
     <html lang="pt-BR">
       <head>
