@@ -20,6 +20,7 @@ import {
   Mail,
   Building,
 } from "lucide-react"
+import ChatWidget from "@/components/chat-widget"
 
 // Custom hook for scroll animations
 const useScrollAnimation = () => {
@@ -654,6 +655,7 @@ export default function CafeCanastraLanding() {
           </div>
         </div>
       </footer>
+      <ChatWidget />
     </div>
   )
 }

@@ -98,10 +98,7 @@ export default function ObrigadoPage() {
                 </div>
               </div>
               <div className="space-y-3">
-                <div className="flex items-center">
-                  <Phone className="w-5 h-5 mr-2 flex-shrink-0 text-orange-400" />
-                  <p>Telefone: (34) 3226-2600</p>
-                </div>
+                {/* Telefone removido do footer */}
                 <div className="flex items-center">
                   <Mail className="w-5 h-5 mr-2 flex-shrink-0 text-orange-400" />
                   <p>Email: comercial@cafecanastra.com</p>
