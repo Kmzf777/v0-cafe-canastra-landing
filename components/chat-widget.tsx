@@ -30,6 +30,9 @@ export default function ChatWidget() {
 
   const inputRef = useRef<HTMLInputElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
+  const inputBarRef = useRef<HTMLDivElement>(null)
+  const [inputBarHeight, setInputBarHeight] = useState(72)
+  const [vvHeight, setVvHeight] = useState<number | null>(null)
 
   const pushMessage = (author: ChatMessage["author"], payload: Omit<ChatMessage, "id" | "author">) => {
     setMessages((prev) => [...prev, { id: Date.now() + prev.length, author, ...payload }])
@@ -165,7 +168,7 @@ export default function ChatWidget() {
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-[1000] bg-white">
+        <div className="fixed inset-0 z-[1000] bg-white overflow-hidden" style={{ height: vvHeight ?? undefined }}>
           <div className="fixed top-0 left-0 right-0 h-16 px-4 flex items-center gap-3 border-b bg-white/95 backdrop-blur">
             <Button variant="ghost" size="icon" onClick={handleClose} className="rounded-full">
               <ArrowLeft className="h-5 w-5" />
@@ -181,7 +184,11 @@ export default function ChatWidget() {
             </div>
           </div>
 
-          <div ref={listRef} className="pt-20 pb-24 overflow-y-auto h-full">
+          <div
+            ref={listRef}
+            className="overflow-y-auto"
+            style={{ paddingTop: 80, paddingBottom: inputBarHeight + 16, height: vvHeight ? vvHeight - 64 - inputBarHeight : undefined }}
+          >
             <div className="max-w-2xl mx-auto px-4 space-y-4">
               {messages.map((m) => (
                 <div key={m.id} className={`flex ${m.author === "Você" ? "justify-end" : "justify-start"}`}>
@@ -232,7 +239,11 @@ export default function ChatWidget() {
             </div>
           </div>
 
-          <div className="fixed bottom-0 left-0 right-0 bg-white border-t px-3 py-3">
+          <div
+            ref={inputBarRef}
+            className="fixed left-0 right-0 bg-white border-t px-3 py-3"
+            style={{ bottom: "env(safe-area-inset-bottom)" }}
+          >
             <div className="max-w-2xl mx-auto flex items-center gap-2">
               <Input
                 ref={inputRef}
@@ -240,6 +251,13 @@ export default function ChatWidget() {
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") handleSend()
+                }}
+                onFocus={() => {
+                  // Garante que a última mensagem esteja visível quando o teclado abrir
+                  setTimeout(() => {
+                    const el = listRef.current
+                    if (el) el.scrollTo({ top: el.scrollHeight, behavior: "auto" })
+                  }, 350)
                 }}
                 placeholder="Digite sua mensagem..."
                 className="flex-1"
