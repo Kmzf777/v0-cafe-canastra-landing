@@ -23,7 +23,7 @@ import {
   Trophy,
   Heart,
 } from "lucide-react"
-import ChatWidget from "@/components/chat-widget"
+import HelpPopup from "@/components/help-popup"
 
 // Custom hook for scroll animations
 const useScrollAnimation = () => {
@@ -917,15 +917,13 @@ export default function GraoCafeteriaPage() {
           </div>
 
           <div className="text-center mt-8 pt-6 border-t border-gray-800">
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-500 text-sm" suppressHydrationWarning>
               © {new Date().getFullYear()} Café Canastra. Todos os direitos reservados.
             </p>
           </div>
         </div>
       </footer>
-      <ChatWidget />
+      <HelpPopup />
     </div>
   )
 }
-
-<ChatWidget />

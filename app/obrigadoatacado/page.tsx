@@ -104,7 +104,7 @@ export default function ObrigadoAtacadoPage() {
 
             <div className="text-center mt-8 pt-6 border-t border-gray-800">
               <p className="text-gray-500 text-sm">
-                © {new Date().getFullYear()} Café Canastra. Todos os direitos reservados.
+                <span suppressHydrationWarning>© {new Date().getFullYear()} Café Canastra. Todos os direitos reservados.</span>
               </p>
             </div>
           </div>
