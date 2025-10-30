@@ -3,13 +3,73 @@
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import WhatsAppChat from "./whatsapp-chat"
+import { usePathname } from "next/navigation"
+import { X, AlertTriangle, Sparkles, Tag, BadgeCheck, Truck, Timer } from "lucide-react"
 
 export default function HelpPopup() {
+  const pathname = usePathname()
   const [popupVisible, setPopupVisible] = useState(false)
   const [bubbleVisible, setBubbleVisible] = useState(false)
   const [bubbleTyping, setBubbleTyping] = useState(false)
   const [bubbleTextVisible, setBubbleTextVisible] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
+  const [exitIntentOpen, setExitIntentOpen] = useState(false)
+
+  const route = pathname || ""
+  // Considera aliases da página de terceirização
+  const isPrivateLabel = route.includes("/terceirizacaocafe") || route.includes("/terceirizacao")
+  const isAtacado = route.includes("/graocafeteria")
+  const variant: "private-label" | "atacado" | "default" = isPrivateLabel ? "private-label" : isAtacado ? "atacado" : "default"
+
+  const gradientClass =
+    variant === "private-label"
+      ? "from-fuchsia-500 to-purple-600"
+      : variant === "atacado"
+      ? "from-orange-500 to-amber-600"
+      : "from-teal-500 to-emerald-600"
+
+  const headline =
+    variant === "private-label"
+      ? "Você está prestes a perder o café dos seus sonhos com a sua marca."
+      : variant === "atacado"
+      ? "Você está prestes a perder o melhor preço e agilidade no atacado."
+      : "Antes de sair, você pode garantir vantagens exclusivas do Café Canastra."
+
+  const subtext =
+    variant === "private-label"
+      ? "Produzimos seu café com sua marca: blends exclusivos, rotulagem e acompanhamento completo."
+      : variant === "atacado"
+      ? "Fechamos pedidos com rapidez: preço competitivo, cotação instantânea e frete ágil."
+      : "Fale com a Valéria para condições especiais, suporte e resposta imediata."
+
+  const bullets =
+    variant === "private-label"
+      ? [
+          { icon: Sparkles, text: "Crie um blend exclusivo com perfil sensorial da sua marca." },
+          { icon: Tag, text: "Rótulo e identidade visual personalizados sem complicação." },
+          { icon: BadgeCheck, text: "Qualidade controlada e torras consistentes, lote a lote." },
+          { icon: Truck, text: "Logística e prazos de produção alinhados ao seu lançamento." },
+        ]
+      : variant === "atacado"
+      ? [
+          { icon: Tag, text: "Preço de atacado competitivo para maximizar sua margem." },
+          { icon: Timer, text: "Cotação imediata e fechamento ágil pelo WhatsApp." },
+          { icon: Truck, text: "Frete rápido e previsível para Sul/Sudeste." },
+          { icon: BadgeCheck, text: "Atendimento dedicado para seleção de linhas e volumes." },
+        ]
+      : [
+          { icon: Tag, text: "Preços de atacado com margem real para revenda." },
+          { icon: Truck, text: "Frete ágil e suporte direto no WhatsApp." },
+          { icon: BadgeCheck, text: "Condições especiais para primeira compra." },
+          { icon: Timer, text: "Resposta rápida: menos de 1 minuto para começar." },
+        ]
+
+  const ctaLabel =
+    variant === "private-label"
+      ? "Quero minha marca no café"
+      : variant === "atacado"
+      ? "Quero o melhor preço agora"
+      : "Conversar no WhatsApp"
 
   // Sequência de animações
   useEffect(() => {
@@ -36,6 +96,50 @@ export default function HelpPopup() {
       clearTimeout(showMessageTimer)
     }
   }, [])
+
+  // Abre o chat automaticamente após 15 segundos
+  useEffect(() => {
+    const autoOpenTimer = setTimeout(() => {
+      // Evita abrir o chat se o pop-up anti-saída estiver visível
+      setChatOpen((prev) => (exitIntentOpen ? prev : true))
+    }, 15000)
+
+    return () => {
+      clearTimeout(autoOpenTimer)
+    }
+  }, [exitIntentOpen])
+
+  // Exit-intent: abre pop-up quando o usuário tenta sair da página (desktop)
+  useEffect(() => {
+    const KEY = `exit_intent_shown:${variant}`
+
+    const maybeShow = (e: MouseEvent) => {
+      // Evita em mobile e quando o chat já está aberto
+      if (window.innerWidth < 768 || chatOpen) return
+      const already = sessionStorage.getItem(KEY)
+      if (already) return
+
+      // Dispara quando o cursor chega próximo ao topo
+      const nearTop = e.clientY <= 10
+      const leavingWindow = !e.relatedTarget && e.clientY < 10
+
+      if (nearTop || leavingWindow) {
+        setExitIntentOpen(true)
+        try { sessionStorage.setItem(KEY, '1') } catch {}
+      }
+    }
+
+    // Usa mousemove para captar intenção de saída de forma mais confiável
+    document.addEventListener('mousemove', maybeShow)
+    document.addEventListener('mouseleave', maybeShow)
+    document.addEventListener('mouseout', maybeShow)
+
+    return () => {
+      document.removeEventListener('mousemove', maybeShow)
+      document.removeEventListener('mouseleave', maybeShow)
+      document.removeEventListener('mouseout', maybeShow)
+    }
+  }, [chatOpen, variant])
 
   return (
     <>
@@ -75,7 +179,7 @@ export default function HelpPopup() {
                   </div>
                 ) : bubbleTextVisible ? (
                   <span>
-                    Olá? precisa de ajuda? 👋
+                    Vamos falar no Whatsapp?
                   </span>
                 ) : null}
               </div>
@@ -110,6 +214,52 @@ export default function HelpPopup() {
         isOpen={chatOpen} 
         onClose={() => setChatOpen(false)} 
       />
+
+      {/* Pop-up Anti-Saída */}
+      {exitIntentOpen && (
+        <div className="fixed inset-0 z-[60] bg-black/60 flex items-center justify-center p-4" role="dialog" aria-modal="true">
+          <div className="relative w-full max-w-lg bg-white rounded-xl shadow-2xl overflow-hidden animate-in fade-in-0 zoom-in-95">
+            <div className={`h-1 w-full bg-gradient-to-r ${gradientClass}`} />
+            <button
+              onClick={() => setExitIntentOpen(false)}
+              aria-label="Fechar"
+              className="absolute top-3 right-3 p-2 rounded-full hover:bg-black/5 transition-colors"
+            >
+              <X size={18} />
+            </button>
+            <div className="p-6">
+              <div className="flex items-center gap-2">
+                <span className={`inline-flex items-center rounded-full bg-gradient-to-r ${gradientClass} text-white px-3 py-1 text-xs font-bold tracking-wide`}>ESPERA...</span>
+                <AlertTriangle className="text-orange-600" size={18} />
+              </div>
+              <h3 className="mt-3 text-lg font-semibold leading-snug">{headline}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{subtext}</p>
+              <ul className="mt-4 space-y-2">
+                {bullets.map(({ icon: Icon, text }, idx) => (
+                  <li key={idx} className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <Icon size={18} className="text-foreground/80 mt-[2px]" />
+                    <span>{text}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-5 flex items-center justify-end gap-3">
+                <button
+                  onClick={() => setExitIntentOpen(false)}
+                  className="px-3 py-2 rounded-md border bg-white hover:bg-muted/40 transition-colors"
+                >
+                  Continuar navegando
+                </button>
+                <button
+                  onClick={() => { setExitIntentOpen(false); setChatOpen(true) }}
+                  className={`px-4 py-2 rounded-md text-white bg-gradient-to-r ${gradientClass} hover:brightness-110 transition-colors`}
+                >
+                  {ctaLabel}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }
