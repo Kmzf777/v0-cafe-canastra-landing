@@ -164,7 +164,7 @@ export default function HelpPopup() {
           }`}>
             <button
               onClick={() => setChatOpen(true)}
-              className={`${`relative rounded-2xl bg-gradient-to-r from-orange-500 to-orange-600 text-white px-3 py-2 sm:px-4 sm:py-3 shadow-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-200 hover:scale-105`} ${
+              className={`${`relative rounded-2xl bg-[#25D366] text-white px-3 py-2 sm:px-4 sm:py-3 shadow-xl hover:bg-[#1EBE5C] transition-all duration-200 hover:scale-105`} ${
                 bubbleTyping 
                   ? "w-auto" 
                   : "whitespace-nowrap"
@@ -191,7 +191,7 @@ export default function HelpPopup() {
         <button
           onClick={() => setChatOpen(true)}
           aria-label="Abrir ajuda"
-          className="group relative h-16 w-16 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-3xl active:scale-95 overflow-hidden"
+          className="group relative h-16 w-16 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-3xl active:scale-95 overflow-visible"
         >
           {/* Foto de Perfil */}
           <div className="relative h-full w-full">
@@ -203,9 +203,15 @@ export default function HelpPopup() {
               sizes="64px"
             />
           </div>
+
+          {/* Indicador online: círculo pequeno no canto inferior direito */}
+          <div
+            className="absolute bottom-[-3px] right-[-3px] h-4 w-4 sm:h-5 sm:w-5 rounded-full bg-[#25D366] ring-2 ring-white z-20"
+            aria-hidden="true"
+          ></div>
           
           {/* Efeito Ripple */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-teal-400/20 to-teal-500/20 animate-ping opacity-20"></div>
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-teal-400/20 to-teal-500/20 animate-ping opacity-20 z-10"></div>
         </button>
       </div>
 
