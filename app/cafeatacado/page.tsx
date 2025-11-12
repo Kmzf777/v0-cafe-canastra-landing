@@ -16,6 +16,7 @@ import {
   CheckCircle,
   Trophy,
   Heart,
+  Play,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -42,8 +43,52 @@ export default function CafeAtacadoPage() {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [showReplay, setShowReplay] = useState(false)
   const [showStartOverlay, setShowStartOverlay] = useState(true)
+  const [posterUrl, setPosterUrl] = useState<string | undefined>(undefined)
 
   // Iniciar pausado: sem efeitos de autoplay/som automático
+
+  useEffect(() => {
+    const el = videoRef.current
+    if (!el) return
+
+    let canceled = false
+
+    const captureFirstFrame = () => {
+      try {
+        const width = el.videoWidth
+        const height = el.videoHeight
+        if (!width || !height) return
+        const canvas = document.createElement('canvas')
+        canvas.width = width
+        canvas.height = height
+        const ctx = canvas.getContext('2d')
+        if (!ctx) return
+        ctx.drawImage(el, 0, 0, width, height)
+        const url = canvas.toDataURL('image/jpeg', 0.8)
+        if (!canceled) setPosterUrl(url)
+      } catch {}
+    }
+
+    const onLoadedMetadata = () => {
+      try {
+        // Garantir que o primeiro frame esteja disponível
+        el.currentTime = 0
+      } catch {}
+    }
+
+    const onLoadedData = () => {
+      captureFirstFrame()
+    }
+
+    el.addEventListener('loadedmetadata', onLoadedMetadata)
+    el.addEventListener('loadeddata', onLoadedData)
+
+    return () => {
+      canceled = true
+      el.removeEventListener('loadedmetadata', onLoadedMetadata)
+      el.removeEventListener('loadeddata', onLoadedData)
+    }
+  }, [])
 
   const handleReplay = () => {
     setShowReplay(false)
@@ -77,8 +122,53 @@ export default function CafeAtacadoPage() {
       {/* HERO: vídeo 9:16 + branding e CTA na mesma seção, mobile-first */}
       <section className="relative w-full bg-gradient-to-b from-white to-orange-50/40">
         <div className="container mx-auto px-4 pt-6 pb-10 md:py-16 md:min-h-[80vh] grid md:grid-cols-2 items-center gap-8">
-          {/* Bloco do vídeo (sem overlays) */}
-          <div className="order-1 flex justify-center">
+          {/* Bloco de texto/branding: no mobile fica acima do vídeo; no desktop ao lado */}
+          <div className="order-1 md:order-2 text-center md:text-left">
+            <Image
+              src="/images/logo-canastra.png"
+              alt="Café Canastra"
+              width={180}
+              height={56}
+              priority
+              className="mx-auto md:mx-0 select-none"
+            />
+            {/* Título para mobile com texto solicitado */}
+            <h1 className="mt-4 text-3xl font-bold text-gray-800 leading-tight md:hidden">
+              Mais Lucros com <span className="text-orange-500">cafés especiais</span> direto da Canastra
+            </h1>
+            {/* Título original mantido para desktop */}
+            <h1 className="mt-4 hidden md:block md:text-4xl font-bold text-gray-800 leading-tight">
+              Mais lucro com <span className="text-orange-500">cafés especiais</span> direto da Canastra
+            </h1>
+
+            {/* Conteúdo, CTA e diferenciais: visível apenas no desktop nesta coluna */}
+            <p className="mt-2 hidden md:block text-gray-600 md:text-lg">Qualidade SCA, logística rápida e preço imbatível para atacado.</p>
+
+            <div className="mt-6 hidden md:block">
+              <Button
+                onClick={() => window.dispatchEvent(new Event('open-chat'))}
+                className="bg-[#25D366] hover:bg-[#1EBE5C] text-white font-bold px-8 py-4 rounded-full shadow-xl"
+              >
+                📲 Falar com especialista
+              </Button>
+            </div>
+
+            {/* Micro-diferenciais apenas no desktop nesta coluna */}
+            <div className="mt-6 hidden md:flex flex-wrap justify-center md:justify-start gap-3 text-sm">
+              <div className="flex items-center gap-2 bg-white rounded-full px-3 py-2 shadow-sm ring-1 ring-black/5">
+                <BadgeCheck className="w-4 h-4 text-orange-500" /> SCA +80
+              </div>
+              <div className="flex items-center gap-2 bg-white rounded-full px-3 py-2 shadow-sm ring-1 ring-black/5">
+                <Truck className="w-4 h-4 text-orange-500" /> Entrega rápida
+              </div>
+              <div className="flex items-center gap-2 bg-white rounded-full px-3 py-2 shadow-sm ring-1 ring-black/5">
+                <TrendingUp className="w-4 h-4 text-orange-500" /> Melhor preço
+              </div>
+            </div>
+          </div>
+
+          {/* Bloco do vídeo (sem overlays): no mobile fica abaixo do título; no desktop na coluna ao lado */}
+          <div className="order-2 md:order-1 flex justify-center">
             <div className="w-full max-w-[360px] md:w-[320px] md:max-w-none mt-0">
               <AspectRatio ratio={9 / 16}>
                 <div className="relative w-full h-full">
@@ -87,8 +177,8 @@ export default function CafeAtacadoPage() {
                     className="absolute inset-0 w-full h-full object-cover rounded-2xl shadow-2xl ring-1 ring-black/10 bg-black"
                     // Sem autoplay e sem muted: inicia pausado
                     playsInline
-                    preload="auto"
-                    poster="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAQCAMAAABVXg+TAAAAIVBMVEUAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABlqU5hAAAACXRSTlMAAQIDBAYHCQwRKIjzAAAAD0lEQVQY02NgYGBgYGBgAAABQgABYcTtLgAAAABJRU5ErkJggg=="
+                    preload="metadata"
+                    poster={posterUrl}
                     onEnded={() => setShowReplay(true)}
                     onPlay={() => setShowReplay(false)}
                   >
@@ -98,12 +188,13 @@ export default function CafeAtacadoPage() {
 
                   {/* Botão de Assistir sobre o vídeo quando está pausado inicialmente */}
                   {showStartOverlay && (
-                    <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="absolute inset-0 flex items-center justify-center rounded-2xl bg-black/30">
                       <Button
                         onClick={handleStartWatching}
-                        className="bg-black/60 hover:bg-black/70 text-white backdrop-blur-sm px-6 py-3 rounded-full shadow-lg"
+                        aria-label="Assistir vídeo"
+                        className="rounded-full w-16 h-16 md:w-20 md:h-20 p-0 bg-white/90 hover:bg-white text-orange-600 shadow-2xl border border-white/70"
                       >
-                        Assistir
+                        <Play className="w-8 h-8 md:w-10 md:h-10" />
                       </Button>
                     </div>
                   )}
@@ -123,20 +214,9 @@ export default function CafeAtacadoPage() {
             </div>
           </div>
 
-          {/* Bloco de texto/branding e CTA (lado do vídeo no desktop) */}
-          <div className="order-2 text-center md:text-left">
-            <Image
-              src="/images/logo-canastra.png"
-              alt="Café Canastra"
-              width={180}
-              height={56}
-              priority
-              className="mx-auto md:mx-0 select-none"
-            />
-            <h1 className="mt-4 text-3xl md:text-4xl font-bold text-gray-800 leading-tight">
-              Mais lucro com <span className="text-orange-500">cafés especiais</span> direto da Canastra
-            </h1>
-            <p className="mt-2 text-gray-600 md:text-lg">Qualidade SCA, logística rápida e preço imbatível para atacado.</p>
+          {/* Conteúdo, CTA e diferenciais posicionados abaixo do vídeo no mobile */}
+          <div className="order-3 md:hidden text-center">
+            <p className="mt-4 text-gray-600">Qualidade SCA, logística rápida e preço imbatível para atacado.</p>
 
             <div className="mt-6">
               <Button
@@ -147,8 +227,7 @@ export default function CafeAtacadoPage() {
               </Button>
             </div>
 
-            {/* Micro-diferenciais para reforço visual */}
-            <div className="mt-6 flex flex-wrap justify-center md:justify-start gap-3 text-sm">
+            <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
               <div className="flex items-center gap-2 bg-white rounded-full px-3 py-2 shadow-sm ring-1 ring-black/5">
                 <BadgeCheck className="w-4 h-4 text-orange-500" /> SCA +80
               </div>
