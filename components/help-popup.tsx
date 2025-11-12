@@ -18,7 +18,8 @@ export default function HelpPopup() {
   const route = pathname || ""
   // Considera aliases da página de terceirização
   const isPrivateLabel = route.includes("/terceirizacaocafe") || route.includes("/terceirizacao")
-  const isAtacado = route.includes("/graocafeteria")
+  const isAtacado = route.includes("/graocafeteria") || route.includes("/graoatacado") || route.includes("/cafeatacado")
+  const isCafeAtacadoPage = route.includes("/cafeatacado")
   const variant: "private-label" | "atacado" | "default" = isPrivateLabel ? "private-label" : isAtacado ? "atacado" : "default"
 
   const gradientClass =
@@ -97,17 +98,28 @@ export default function HelpPopup() {
     }
   }, [])
 
-  // Abre o chat automaticamente após 15 segundos
+  // Abre o chat automaticamente com delay específico por página
   useEffect(() => {
+    const delayMs = isCafeAtacadoPage ? 60000 : 15000
     const autoOpenTimer = setTimeout(() => {
       // Evita abrir o chat se o pop-up anti-saída estiver visível
       setChatOpen((prev) => (exitIntentOpen ? prev : true))
-    }, 15000)
+    }, delayMs)
 
     return () => {
       clearTimeout(autoOpenTimer)
     }
-  }, [exitIntentOpen])
+  }, [exitIntentOpen, isCafeAtacadoPage])
+
+  // Listener global: permite que CTAs da página abram o chat
+  useEffect(() => {
+    const handler = () => setChatOpen(true)
+    // Tipagem relaxada por ser um evento custom
+    window.addEventListener('open-chat' as any, handler as EventListener)
+    return () => {
+      window.removeEventListener('open-chat' as any, handler as EventListener)
+    }
+  }, [])
 
   // Exit-intent: abre pop-up quando o usuário tenta sair da página (desktop)
   useEffect(() => {
