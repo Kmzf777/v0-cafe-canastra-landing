@@ -268,6 +268,8 @@ export default function WhatsAppChat({ isOpen, onClose }: ChatProps) {
                 redirectPath = '/obrigadoterceirizacao'
               } else if (currentPath.includes('/graocafeteria')) {
                 redirectPath = '/obrigadoatacado'
+              } else if (currentPath.includes('/cafeatacado')) {
+                redirectPath = '/obrigadocafeatacado'
               }
               
               router.push(redirectPath)
