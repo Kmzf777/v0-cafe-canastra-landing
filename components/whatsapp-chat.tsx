@@ -15,11 +15,12 @@ interface Message {
 interface ChatProps {
   isOpen: boolean
   onClose: () => void
+  attendantName?: string
 }
 
 type ConversationStep = 'greeting' | 'name' | 'phone' | 'email' | 'completed'
 
-export default function WhatsAppChat({ isOpen, onClose }: ChatProps) {
+export default function WhatsAppChat({ isOpen, onClose, attendantName = "Valéria" }: ChatProps) {
   const [messages, setMessages] = useState<Message[]>([])
   const [inputValue, setInputValue] = useState("")
   const [currentStep, setCurrentStep] = useState<ConversationStep>('greeting')
@@ -217,11 +218,14 @@ export default function WhatsAppChat({ isOpen, onClose }: ChatProps) {
 
   const submitToWebhook = async (data: typeof userInfo) => {
     try {
+      const currentPath = window.location.pathname
+      const origem = currentPath.includes('/cafeatacado') ? "atacado" : "Chat WhatsApp"
+
       const formData = {
         nome: data.name,
         whatsapp: data.phone,
         email: data.email,
-        origem: "Chat WhatsApp",
+        origem: origem,
         timestamp: new Date().toISOString()
       }
 
@@ -313,13 +317,13 @@ export default function WhatsAppChat({ isOpen, onClose }: ChatProps) {
           <div className="relative w-10 h-10 rounded-full overflow-hidden">
             <Image
               src="/valeria-foto.jpeg"
-              alt="Valéria"
+              alt="Viviane"
               fill
               className="object-cover"
             />
           </div>
           <div className="flex-1">
-            <h3 className="font-semibold">Valéria</h3>
+            <h3 className="font-semibold">{attendantName}</h3>
             <p className="text-xs text-green-200">
               {isTyping ? "digitando..." : "online"}
             </p>

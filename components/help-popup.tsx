@@ -21,6 +21,8 @@ export default function HelpPopup() {
   const isAtacado = route.includes("/graocafeteria") || route.includes("/graoatacado") || route.includes("/cafeatacado")
   const isCafeAtacadoPage = route.includes("/cafeatacado")
   const variant: "private-label" | "atacado" | "default" = isPrivateLabel ? "private-label" : isAtacado ? "atacado" : "default"
+  
+  const attendantName = isCafeAtacadoPage ? "Viviane" : "Valéria"
 
   const gradientClass =
     variant === "private-label"
@@ -41,7 +43,7 @@ export default function HelpPopup() {
       ? "Produzimos seu café com sua marca: blends exclusivos, rotulagem e acompanhamento completo."
       : variant === "atacado"
       ? "Fechamos pedidos com rapidez: preço competitivo, cotação instantânea e frete ágil."
-      : "Fale com a Valéria para condições especiais, suporte e resposta imediata."
+      : `Fale com a ${attendantName} para condições especiais, suporte e resposta imediata.`
 
   const bullets =
     variant === "private-label"
@@ -209,7 +211,7 @@ export default function HelpPopup() {
           <div className="relative h-full w-full">
             <Image
               src="/valeria-foto.jpeg"
-              alt="Valéria - Atendimento"
+              alt={`${attendantName} - Atendimento`}
               fill
               className="object-cover rounded-full transition-transform group-hover:scale-110"
               sizes="64px"
@@ -230,7 +232,8 @@ export default function HelpPopup() {
       {/* Chat do WhatsApp */}
       <WhatsAppChat 
         isOpen={chatOpen} 
-        onClose={() => setChatOpen(false)} 
+        onClose={() => setChatOpen(false)}
+        attendantName={attendantName}
       />
 
       {/* Pop-up Anti-Saída */}
