@@ -43,7 +43,7 @@ export default function ObrigadoPage() {
                   className="bg-green-500 hover:bg-green-600 text-white px-10 py-5 text-lg font-semibold rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 group"
                 >
                   <a
-                    href="https://wa.me/553497308171"
+                    href="https://wa.me/553491461669"
                     target="_blank"
                     rel="noopener noreferrer"
                   >

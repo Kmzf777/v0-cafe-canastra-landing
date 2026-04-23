@@ -37,7 +37,7 @@ import HelpPopup from "@/components/help-popup"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import ProductCarousel from "@/components/product-carousel"
 
-const WHATSAPP_URL = "https://wa.me/553497308171?text=Ol%C3%A1%2C%20quero%20a%20tabela%20de%20pre%C3%A7os%20do%20atacado%20Caf%C3%A9%20Canastra.%20Poderia%20me%20ajudar%3F"
+const WHATSAPP_URL = "https://wa.me/553491461669?text=Ol%C3%A1%2C%20quero%20a%20tabela%20de%20pre%C3%A7os%20do%20atacado%20Caf%C3%A9%20Canastra.%20Poderia%20me%20ajudar%3F"
 
 export default function CafeAtacadoPage() {
   const videoRef = useRef<HTMLVideoElement | null>(null)
