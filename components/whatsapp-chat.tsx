@@ -253,42 +253,32 @@ export default function WhatsAppChat({ isOpen, onClose, attendantName = "Valéri
         })
       ]
 
-      const results = await Promise.all(webhookPromises)
-      
-      // Considera sucesso se pelo menos um webhook funcionou
-      const hasSuccess = results.some(result => result.ok !== false)
-      
-      if (hasSuccess) {
-        setTimeout(() => {
-          addBotMessage("Tudo certo! Em breve entraremos em contato. ✅")
-          setTimeout(() => {
-            addBotMessage("Redirecionando você...")
-            setTimeout(() => {
-              // Detectar a página atual e redirecionar para a página correta
-              const currentPath = window.location.pathname
-              let redirectPath = '/obrigadoatacado' // padrão
-              
-              if (currentPath.includes('/terceirizacaocafe')) {
-                redirectPath = '/obrigadoterceirizacao'
-              } else if (currentPath.includes('/graocafeteria')) {
-                redirectPath = '/obrigadoatacado'
-              } else if (currentPath.includes('/cafeatacado')) {
-                redirectPath = '/obrigadocafeatacado'
-              }
-              
-              router.push(redirectPath)
-            }, 2000)
-          }, 1500)
-        }, 1000)
-      } else {
-        throw new Error("Todos os webhooks falharam")
-      }
+      await Promise.all(webhookPromises)
 
     } catch (error) {
-      console.error("Erro ao enviar dados:", error)
+      console.error("Erro ao enviar dados (não bloqueia o fluxo):", error)
+    } finally {
+      // Sempre redireciona, independente do resultado do webhook
       setTimeout(() => {
-        addBotMessage("Ops! Houve um erro. Tente novamente mais tarde. ❌")
-        setIsSubmitting(false)
+        addBotMessage("Tudo certo! Em breve entraremos em contato. ✅")
+        setTimeout(() => {
+          addBotMessage("Redirecionando você...")
+          setTimeout(() => {
+            // Detectar a página atual e redirecionar para a página correta
+            const currentPath = window.location.pathname
+            let redirectPath = '/obrigadoatacado' // padrão
+
+            if (currentPath.includes('/terceirizacaocafe')) {
+              redirectPath = '/obrigadoterceirizacao'
+            } else if (currentPath.includes('/graocafeteria')) {
+              redirectPath = '/obrigadoatacado'
+            } else if (currentPath.includes('/cafeatacado')) {
+              redirectPath = '/obrigadocafeatacado'
+            }
+
+            router.push(redirectPath)
+          }, 2000)
+        }, 1500)
       }, 1000)
     }
   }
