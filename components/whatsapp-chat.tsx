@@ -219,7 +219,11 @@ export default function WhatsAppChat({ isOpen, onClose, attendantName = "Valéri
   const submitToWebhook = async (data: typeof userInfo) => {
     try {
       const currentPath = window.location.pathname
-      const origem = currentPath.includes('/cafeatacado') ? "atacado" : "Chat WhatsApp"
+      const origem = currentPath.includes('/cafeatacado')
+        ? "atacado"
+        : currentPath.includes('/terceirizacaocafe')
+          ? "terceirizacao"
+          : "Chat WhatsApp"
 
       const formData = {
         nome: data.name,
@@ -229,31 +233,15 @@ export default function WhatsAppChat({ isOpen, onClose, attendantName = "Valéri
         timestamp: new Date().toISOString()
       }
 
-      // Enviar para os dois webhooks (mesmo padrão das outras páginas)
-      const webhookPromises = [
-        fetch("https://n8n.canastrainteligencia.com/webhook-test/landing-page", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }).catch(err => {
-          console.warn("Webhook 1 falhou:", err)
-          return { ok: false }
-        }),
-        fetch("https://webhook.canastrainteligencia.com/webhook/landing-page", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }).catch(err => {
-          console.warn("Webhook 2 falhou:", err)
-          return { ok: false }
-        })
-      ]
-
-      await Promise.all(webhookPromises)
+      await fetch("https://crm.canastrainteligencia.com/webhook/landing-page", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }).catch(err => {
+        console.warn("Webhook CRM falhou:", err)
+      })
 
     } catch (error) {
       console.error("Erro ao enviar dados (não bloqueia o fluxo):", error)
