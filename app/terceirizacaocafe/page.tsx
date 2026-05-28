@@ -97,28 +97,17 @@ export default function CafeCanastraLanding() {
       email: email,
       whatsapp: whatsapp,
       timestamp: new Date().toISOString(),
+      origem: "terceirizacao",
     }
 
     try {
-      // Enviar para os dois webhooks
-      const webhookPromises = [
-        fetch("https://n8n.canastrainteligencia.com/webhook-test/landing-page", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }),
-        fetch("https://webhook.canastrainteligencia.com/webhook/landing-page", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }),
-      ]
-
-      await Promise.all(webhookPromises)
+      await fetch("https://crm.canastrainteligencia.com/webhook/landing-page", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
 
       // Limpar formulário
       setName("")
