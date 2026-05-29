@@ -5,7 +5,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Instagram, MapPin, Mail, Building, MessageCircle } from "lucide-react"
 
-const WHATSAPP_URL = "https://wa.me/553491461669"
+const WHATSAPP_URL = "https://wa.me/553492009777"
 const AUTO_REDIRECT_SECONDS = 10
 
 export default function ObrigadoCafeAtacadoPage() {
