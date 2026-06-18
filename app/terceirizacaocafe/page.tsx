@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -16,9 +15,9 @@ import {
   ChevronUp,
   ArrowRight,
   MapPin,
-  Phone,
   Mail,
   Building,
+  MessageCircle,
 } from "lucide-react"
 import HelpPopup from "@/components/help-popup"
 
@@ -57,99 +56,23 @@ const useScrollAnimation = () => {
 }
 
 export default function CafeCanastraLanding() {
-  const router = useRouter()
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const { isVisible: isHeroVisible, elementRef: heroRef } = useScrollAnimation()
   const { isVisible: isLogoVisible, elementRef: logoRef } = useScrollAnimation()
   const { isVisible: isBenefitsVisible, elementRef: benefitsRef } = useScrollAnimation()
   const { isVisible: isHowItWorksVisible, elementRef: howItWorksRef } = useScrollAnimation()
-  const { isVisible: isSocialProofVisible, elementRef: socialProofRef } = useScrollAnimation()
   const { isVisible: isOptionsVisible, elementRef: optionsRef } = useScrollAnimation()
   const { isVisible: isHistoryVisible, elementRef: historyRef } = useScrollAnimation()
   const { isVisible: isFaqVisible, elementRef: faqRef } = useScrollAnimation()
-  const [name, setName] = useState("")
-  const [company, setCompany] = useState("")
-  const [email, setEmail] = useState("")
-  const [whatsapp, setWhatsapp] = useState("")
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isContactVisible, setIsContactVisible] = useState(false)
-  const contactRef = useRef<HTMLElement>(null)
+  const { isVisible: isCtaVisible, elementRef: ctaRef } = useScrollAnimation()
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index)
   }
 
-  const scrollToForm = () => {
-    const contactSection = document.getElementById("contact")
-    contactSection?.scrollIntoView({ behavior: "smooth" })
+  const openChat = () => {
+    window.dispatchEvent(new Event("open-chat"))
   }
-
-  const handleSubmit = async () => {
-    if (!name || !whatsapp) {
-      alert("Por favor, preencha todos os campos.")
-      return
-    }
-
-    setIsSubmitting(true)
-
-    const formData = {
-      nome: name,
-      email: email,
-      whatsapp: whatsapp,
-      timestamp: new Date().toISOString(),
-      origem: "terceirizacao",
-    }
-
-    try {
-      await fetch("https://crm.canastrainteligencia.com/webhook/landing-page", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      })
-
-      // Limpar formulário
-      setName("")
-      setEmail("")
-      setWhatsapp("")
-
-      // Redirecionar para página de obrigado
-      router.push("/obrigadoterceirizacao")
-    } catch (error) {
-      console.error("Erro ao enviar dados:", error)
-      // Mesmo com erro, redirecionar para página de obrigado
-      router.push("/obrigadoterceirizacao")
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsContactVisible(true)
-            observer.unobserve(entry.target)
-          }
-        })
-      },
-      {
-        threshold: 0.1,
-      },
-    )
-
-    if (contactRef.current) {
-      observer.observe(contactRef.current)
-    }
-
-    return () => {
-      if (contactRef.current) {
-        observer.unobserve(contactRef.current)
-      }
-    }
-  }, [])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -168,7 +91,7 @@ export default function CafeCanastraLanding() {
 
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
           <Button
-            onClick={scrollToForm}
+            onClick={openChat}
             size="lg"
             className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-10 py-5 text-lg font-semibold rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 group"
           >
@@ -178,66 +101,31 @@ export default function CafeCanastraLanding() {
         </div>
       </section>
 
-      {/* Entre em contato */}
-      <section className="py-20 bg-white" id="contact" ref={contactRef}>
+      {/* Falar com Especialista */}
+      <section className="py-20 bg-white" id="contact" ref={ctaRef as React.RefObject<HTMLElement>}>
         <div className="container mx-auto px-4">
           <div
             className={`transition-all duration-1000 ${
-              isContactVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+              isCtaVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-8">
-              Entre em <span className="text-orange-500">contato agora!</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-6">
+              Pronto para criar
+              <br />
+              <span className="text-orange-500">sua marca de café?</span>
             </h2>
-            <p className="text-lg md:text-xl text-center text-gray-600 mb-8 max-w-2xl mx-auto">
-              Assim que você preencher, já vamos te mandar uma mensagem!
+            <p className="text-lg md:text-xl text-center text-gray-600 mb-10 max-w-2xl mx-auto">
+              Fale agora com um de nossos especialistas e tire todas as suas dúvidas pelo WhatsApp.
             </p>
-            <div className="max-w-lg mx-auto">
-              <Card className="bg-white border-0 rounded-3xl p-8 shadow-2xl shadow-orange-200/20">
-                <CardContent className="space-y-6">
-                  <div>
-                    <label className="block text-gray-700 text-sm font-bold mb-2">Nome</label>
-                    <input
-                      type="text"
-                      className="w-full py-4 px-6 rounded-full border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 text-gray-700 placeholder-gray-400"
-                      placeholder="Seu Nome Aqui"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
-                    <input
-                      type="email"
-                      className="w-full py-4 px-6 rounded-full border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 text-gray-700 placeholder-gray-400"
-                      placeholder="seu@email.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-700 text-sm font-bold mb-2">WhatsApp</label>
-                    <input
-                      type="tel"
-                      className="w-full py-4 px-6 rounded-full border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 text-gray-700 placeholder-gray-400"
-                      placeholder="(DD)XXXXX-XXXX"
-                      value={whatsapp}
-                      onChange={(e) => setWhatsapp(e.target.value)}
-                    />
-                  </div>
-                  <Button
-                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 px-6 rounded-full focus:outline-none focus:shadow-outline transform hover:scale-105 transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed"
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "Enviando..." : "Enviar"}
-                    {!isSubmitting && (
-                      <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    )}
-                  </Button>
-                </CardContent>
-              </Card>
+            <div className="flex justify-center">
+              <Button
+                onClick={openChat}
+                size="lg"
+                className="bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white px-12 py-6 text-xl font-bold rounded-full shadow-2xl shadow-purple-200/50 transform hover:scale-105 transition-all duration-300 group"
+              >
+                <MessageCircle className="mr-3 w-6 h-6" />
+                Falar com Especialista
+              </Button>
             </div>
           </div>
         </div>
@@ -269,7 +157,7 @@ export default function CafeCanastraLanding() {
             </p>
 
             <Button
-              onClick={scrollToForm}
+              onClick={openChat}
               size="lg"
               className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-10 py-5 text-lg font-semibold rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 group"
             >
@@ -420,7 +308,7 @@ export default function CafeCanastraLanding() {
                   </p>
                   <Button
                     className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-3 rounded-full group"
-                    onClick={scrollToForm}
+                    onClick={openChat}
                   >
                     Entrar em contato agora!
                     <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -444,7 +332,7 @@ export default function CafeCanastraLanding() {
                   </p>
                   <Button
                     className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-3 rounded-full group"
-                    onClick={scrollToForm}
+                    onClick={openChat}
                   >
                     Entrar em contato agora!
                     <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -468,7 +356,7 @@ export default function CafeCanastraLanding() {
                   </p>
                   <Button
                     className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-3 rounded-full group"
-                    onClick={scrollToForm}
+                    onClick={openChat}
                   >
                     Entrar em contato agora!
                     <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -588,7 +476,7 @@ export default function CafeCanastraLanding() {
             </div>
             <div className="text-center mt-12">
               <Button
-                onClick={scrollToForm}
+                onClick={openChat}
                 size="lg"
                 className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-10 py-5 text-lg font-semibold rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 group"
               >

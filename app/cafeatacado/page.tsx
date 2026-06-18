@@ -147,7 +147,7 @@ export default function CafeAtacadoPage() {
             <div className="mt-6 hidden md:block">
               <Button
                 onClick={() => window.dispatchEvent(new Event('open-chat'))}
-                className="bg-[#25D366] hover:bg-[#1EBE5C] text-white font-bold px-8 py-4 rounded-full shadow-xl"
+                className="bg-[#25D366] hover:bg-[#1EBE5C] text-white font-bold text-xl px-12 py-6 rounded-full shadow-xl"
               >
                 📲 Falar com especialista
               </Button>
@@ -221,7 +221,7 @@ export default function CafeAtacadoPage() {
             <div className="mt-6">
               <Button
                 onClick={() => window.dispatchEvent(new Event('open-chat'))}
-                className="bg-[#25D366] hover:bg-[#1EBE5C] text-white font-bold px-8 py-4 rounded-full shadow-xl"
+                className="w-full bg-[#25D366] hover:bg-[#1EBE5C] text-white font-bold text-lg py-6 rounded-full shadow-xl"
               >
                 📲 Falar com especialista
               </Button>
@@ -428,7 +428,7 @@ export default function CafeAtacadoPage() {
           <p className="text-white/90 mb-6">Fale com nosso time agora. Resposta em segundos.</p>
           <Button
             onClick={() => window.dispatchEvent(new Event('open-chat'))}
-            className="bg-white text-orange-700 hover:bg-white/90 font-bold px-8 py-4 rounded-full shadow-xl"
+            className="bg-white text-orange-700 hover:bg-white/90 font-bold text-lg px-12 py-6 rounded-full shadow-xl"
           >
             📲 Chamar no WhatsApp
           </Button>
