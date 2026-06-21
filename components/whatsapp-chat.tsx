@@ -181,6 +181,10 @@ export default function WhatsAppChat({ isOpen, onClose, attendantName = "Valéri
           return
         }
         setUserInfo(prev => ({ ...prev, phone: message }))
+        // Captura imediata: grava o lead assim que temos nome+telefone, ANTES de pedir o
+        // e-mail. Evita perder quem abandona na etapa do e-mail (o telefone basta para o
+        // outbound da Valéria). O e-mail vira enriquecimento no submit final.
+        captureLeadEarly(userInfo.name, message)
         setTimeout(() => {
           addBotMessage("Perfeito! 📱")
           setTimeout(() => {
@@ -213,6 +217,39 @@ export default function WhatsAppChat({ isOpen, onClose, attendantName = "Valéri
           }, 1500)
         }, 800)
         break
+    }
+  }
+
+  // Deriva a origem do funil a partir da rota atual — mesma regra do submitToWebhook.
+  const origemFromPath = () => {
+    const currentPath = window.location.pathname
+    return currentPath.includes('/cafeatacado')
+      ? "atacado"
+      : currentPath.includes('/terceirizacaocafe')
+        ? "terceirizacao"
+        : "Chat WhatsApp"
+  }
+
+  // Captura antecipada (Gap B): posta o lead assim que há telefone, sem redirecionar.
+  // `keepalive` garante a entrega mesmo se a aba fechar logo em seguida. Fire-and-forget:
+  // nunca bloqueia nem quebra o fluxo do chat. O backend faz upsert por telefone, então o
+  // submit final (com e-mail) apenas enriquece o mesmo lead — sem duplicar.
+  const captureLeadEarly = (name: string, phone: string) => {
+    try {
+      fetch("https://crm.canastrainteligencia.com/webhook/landing-page", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nome: name,
+          whatsapp: phone,
+          email: "",
+          origem: origemFromPath(),
+          timestamp: new Date().toISOString(),
+        }),
+        keepalive: true,
+      }).catch(() => {})
+    } catch {
+      // nunca interrompe o chat
     }
   }
 
